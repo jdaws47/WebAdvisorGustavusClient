@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         }
         fragmentTransaction.setPrimaryNavigationFragment(fragmentTemp)
         fragmentTransaction.setReorderingAllowed(true)
-        fragmentTransaction.commitNowAllowingStateLoss()
+        //fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commitAllowingStateLoss()
     }
 }

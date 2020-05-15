@@ -4,4 +4,10 @@
     <string name="title_courses">Courses</string>
     <string name="title_notifications">Notifications</string>
     <string name="login_button_prompt">Login</string>
+    <string name="class_search_button">Search for Classes</string>
+    <string name="current_courses_button">View Current Class Schedule</string>
+    <string name="transcript_view_button">View Transcript</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -3,6 +3,7 @@ package edu.gustavus.webadvisorapp.ui.courses
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.util.*
 
 class CoursesViewModel : ViewModel() {
 
@@ -10,4 +11,6 @@ class CoursesViewModel : ViewModel() {
         value = "This is courses Fragment"
     }
     val text: LiveData<String> = _text
+    val current_date = Date()
+    var buttonsHidden = false
 }
