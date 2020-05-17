@@ -1,9 +1,12 @@
 package edu.gustavus.webadvisorapp.ui.courses
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
@@ -16,10 +19,12 @@ import edu.gustavus.webadvisorapp.R
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.CurrentCoursesFragment
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.SearchCoursesFragment
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.TranscriptFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_courses.*
 
 class CoursesFragment : Fragment() {
 
+    private lateinit var webView: WebView
     private lateinit var searchButton: Button
     private lateinit var currentClassesButton: Button
     private lateinit var transcriptButton: Button
@@ -36,6 +41,9 @@ class CoursesFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_courses, container, false)
+
+        webView = requireActivity().webview
+
         val textView: TextView = root.findViewById(R.id.text_dashboard)
         coursesViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
