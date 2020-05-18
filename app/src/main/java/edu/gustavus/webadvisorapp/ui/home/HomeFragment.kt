@@ -12,12 +12,13 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import edu.gustavus.webadvisorapp.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlin.math.log
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 private val STARTING_URL = "https://wa.gac.edu/WebAdvisor"
@@ -60,6 +61,18 @@ class HomeFragment : Fragment() {
         updateUi()
 
         return root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val cstCdtFormat = SimpleDateFormat("HH")
+        cstCdtFormat.timeZone = TimeZone.getTimeZone("CST6CDT")
+        val hour = cstCdtFormat.format(Date())
+        Log.i("HOME", "the hour of the time in CST/CDT is $hour")
+        if (hour.toInt() >= 2 && hour.toInt() < 4){
+            loginButton.isEnabled = false
+            textView.text = "WebAdvisor is unavailable daily from 2:00am to 4:00am CST"
+        }
     }
 
     private fun toggleVisibility() {

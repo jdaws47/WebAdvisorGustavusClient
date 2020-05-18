@@ -79,10 +79,10 @@ class TranscriptFragment : Fragment() {
                                     "else{"+
                                         "text = mainTable.rows[i].cells[j].children[0].children[0].innerHTML;}"+
                                     "if(text.localeCompare('\\n') != 0){"+
-                                        "returnStr = returnStr.concat(text.replace(',','.'));}"+
+                                        "returnStr = returnStr.concat(text.replace(',',';'));}"+
                                     "returnStr = returnStr.concat(',');"+
                                 "}"+
-                                "returnStr = returnStr.concat(';');"+
+                                "returnStr = returnStr.concat('|');"+
                             "}"+
                             "return returnStr;"+
                             "})()") { table ->
@@ -90,7 +90,7 @@ class TranscriptFragment : Fragment() {
                         val tableArr = convertStringTo2DArray(table)
                         for(row in tableArr)
                             for(col in row.indices)
-                                row[col] = row[col].replace(".", ",")
+                                row[col] = row[col].replace(";", ",")
                         Log.i("TRANSCRIPT", "table: $tableArr")
                         adapter?.arr = tableArr
                         adapter?.submitList(tableArr)
@@ -101,7 +101,7 @@ class TranscriptFragment : Fragment() {
     }
 
     private fun convertStringTo2DArray(str: String) : List<MutableList<String>> {
-        val rows = str.replace("\"","").split(";")
+        val rows = str.replace("\"","").split("|")
         val arr = List<MutableList<String>>(rows.size - 1) { MutableList<String>(0) {""} }
         for (i in arr.indices) {
             val cols = rows[i].split(",")
