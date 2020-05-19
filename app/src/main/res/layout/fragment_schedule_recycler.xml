@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.courses.subfragments.CurrentCoursesFragment">
+    tools:context=".ui.courses.subfragments.ScheduleRecyclerFragment" >
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_schedule"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="this is the current courses fragment"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

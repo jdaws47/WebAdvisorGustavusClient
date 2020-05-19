@@ -15,4 +15,5 @@ class CoursesViewModel : ViewModel() {
     val text: LiveData<String> = _text
     val current_date = Date()
     var buttonsHidden = false
+    var buttonsEnabled = true
 }

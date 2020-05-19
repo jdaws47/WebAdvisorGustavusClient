@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 private val STARTING_URL = "https://wa.gac.edu/WebAdvisor"
@@ -65,13 +67,13 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val cstCdtFormat = SimpleDateFormat("HH")
-        cstCdtFormat.timeZone = TimeZone.getTimeZone("CST6CDT")
-        val hour = cstCdtFormat.format(Date())
-        Log.i("HOME", "the hour of the time in CST/CDT is $hour")
-        if (hour.toInt() >= 2 && hour.toInt() < 4){
-            loginButton.isEnabled = false
-            textView.text = "WebAdvisor is unavailable daily from 2:00am to 4:00am CST"
+        checkTime()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            checkTime()
         }
     }
 
@@ -81,7 +83,27 @@ class HomeFragment : Fragment() {
         textView.isGone = !textView.isGone
     }
 
+    private fun showWebView() {
+        webView.isVisible = true
+        login_button.isGone = true
+        textView.isGone = true
+    }
+
+    private fun checkTime() {
+        val cstCdtFormat = SimpleDateFormat("HH")
+        cstCdtFormat.timeZone = TimeZone.getTimeZone("CST6CDT")
+        val hour = cstCdtFormat.format(Date())
+        Log.i("HOME", "the hour of the time in CST/CDT is $hour")
+        if (hour.toInt() >= 2 && hour.toInt() < 4){
+            loginButton.isGone = false
+            loginButton.isEnabled = false
+            textView.text = "WebAdvisor is unavailable daily from 2:00am to 4:00am CST"
+        }
+    }
+
     private fun login() {
+        var didNotReachLoginScreen = true
+
         val wvc = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String){
                 webView.evaluateJavascript(
@@ -91,6 +113,7 @@ class HomeFragment : Fragment() {
                     if(homeViewModel.firstLoad) {
                         val loginIndex = html.indexOf("acctLogin")
                         if(loginIndex != -1) {
+                            didNotReachLoginScreen = false
                             val loginSub = html.substring(loginIndex - 10..loginIndex + 300)
                             Log.i("HTML", "${loginSub} at index $loginIndex")
                             val hrefTagStart = "href=\\\""
@@ -108,7 +131,7 @@ class HomeFragment : Fragment() {
                                     "})()")*/
                             requireActivity().runOnUiThread(Runnable {
                                 webView.loadUrl(loginHref.replace("&amp;", "&").replace(":443", ""))
-                                toggleVisibility()
+                                showWebView()
                             })
                         }
                     }
@@ -133,6 +156,7 @@ class HomeFragment : Fragment() {
                         }
 
                         homeViewModel.loggedIn = true
+                        webView.loggedIn = true
                         requireActivity().runOnUiThread {
                             login_button.isGone = true
                             toggleVisibility()
@@ -147,6 +171,21 @@ class HomeFragment : Fragment() {
         //webView.webChromeClient = WebChromeClient()
         webView.setWebViewClient(wvc)
         webView.loadUrl(STARTING_URL)
+
+        Timer().schedule(5000) {
+            Log.i("LoginTimer","loginTimer executing")
+            if(didNotReachLoginScreen) {
+                requireActivity().runOnUiThread {
+                    Log.i("LoginTimer","webview execution blocked: clearing cookies")
+                    homeViewModel.firstLoad = true
+                    homeViewModel.secondLoad = true
+                    homeViewModel.loggedIn = false
+                    webView.clearCache(true)
+                    CookieManager.getInstance().removeAllCookies(null)
+                    webView.loadUrl(STARTING_URL)
+                }
+            }
+        }
     }
 
     private fun updateUi() {

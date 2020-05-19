@@ -61,27 +61,10 @@ class TranscriptFragment : Fragment() {
                 } else if(view.title.toLowerCase().indexOf("transcript") != -1) {
                     Log.i("TRANSCRIPT", "converting table")
                     view.evaluateJavascript("javascript:(function(){"+
-                            "var div = document.getElementsByClassName('envisionWindow')[0];"+
-                            "var mainTable = div.children[2];"+
-                            "var returnStr = '';"+
-                            "for(var i=0;i<mainTable.rows.length;i++){"+
-                                "for (var j=0;j<mainTable.rows[i].cells.length;j++){"+
-                                    "if(j == 0){continue;}"+
-                                    "var text = '';"+
-                                    "if(i == 0){"+
-                                        "text = mainTable.rows[i].cells[j].innerText;}"+
-                                    "else{"+
-                                        "text = mainTable.rows[i].cells[j].children[0].children[0].innerHTML;}"+
-                                    "if(text.localeCompare('\\n') != 0){"+
-                                        "returnStr = returnStr.concat(text.replace(',',';'));}"+
-                                    "returnStr = returnStr.concat(',');"+
-                                "}"+
-                                "returnStr = returnStr.concat('|');"+
-                            "}"+
-                            "return returnStr;"+
+                            webView.getTableByDivId("GROUP_Grp_VAR_STC_COURSE_NAME")+
                             "})()") { table ->
                         Log.i("TRANSCRIPT", "table: $table")
-                        val tableArr = convertStringTo2DArray(table)
+                        val tableArr = webView.convertTableStringTo2DArray(table)
                         for(row in tableArr)
                             for(col in row.indices)
                                 row[col] = row[col].replace(";", ",")

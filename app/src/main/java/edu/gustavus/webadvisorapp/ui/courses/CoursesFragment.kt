@@ -5,8 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
@@ -17,7 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import edu.gustavus.webadvisorapp.R
 import edu.gustavus.webadvisorapp.WAWebView
-import edu.gustavus.webadvisorapp.ui.courses.subfragments.CurrentCoursesFragment
+import edu.gustavus.webadvisorapp.ui.courses.subfragments.CourseScheduleFragment
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.SearchCoursesFragment
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.TranscriptFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -69,7 +67,7 @@ class CoursesFragment : Fragment() {
         currentClassesButton.setOnClickListener {
             hideButtons()
             val fragment =
-                CurrentCoursesFragment()
+                CourseScheduleFragment()
             childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             childFragmentManager.beginTransaction()
                 .replace(R.id.child_fragment_container, fragment)
@@ -91,10 +89,35 @@ class CoursesFragment : Fragment() {
         childFragmentManager.addOnBackStackChangedListener {
             if(childFragmentManager.backStackEntryCount == 0) {
                 showButtons()
+                enableButtons(false)
+                Log.i("CoursesFragment","navigating to student menu")
+                webView.navigateToStudentMenu() {
+                    enableButtons(true)
+                }
             }
         }
 
         return root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        enableButtons(false)
+        Log.i("CoursesFragment","navigating to student menu")
+        webView.navigateToStudentMenu() {
+            enableButtons(true)
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            enableButtons(false)
+            Log.i("CoursesFragment", "navigating to student menu")
+            webView.navigateToStudentMenu() {
+                enableButtons(true)
+            }
+        }
     }
 
     private fun hideButtons() {
@@ -107,8 +130,17 @@ class CoursesFragment : Fragment() {
         updateButtons()
     }
 
+    private fun enableButtons(enable: Boolean){
+        coursesViewModel.buttonsEnabled = enable
+        updateButtons()
+    }
+
     private fun updateButtons() {
         button_group.isGone = coursesViewModel.buttonsHidden
+        for(button in buttonGroup.referencedIds) {
+            if(requireView().findViewById<View>(button) is Button)
+                requireView().findViewById<Button>(button).isEnabled = coursesViewModel.buttonsEnabled
+        }
         /*searchButton.isGone = coursesViewModel.buttonsHidden
         currentClassesButton.isGone = coursesViewModel.buttonsHidden
         transcriptButton.isGone = coursesViewModel.buttonsHidden*/

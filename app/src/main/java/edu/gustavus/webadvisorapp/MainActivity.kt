@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         CookieSyncManager.createInstance(applicationContext)
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
-        CookieManager.getInstance().removeAllCookies(null)
+        //CookieManager.getInstance().removeAllCookies(null)
         webView.settings.javaScriptEnabled = true
         webView.settings.javaScriptCanOpenWindowsAutomatically = true
         webView.settings.domStorageEnabled = true
