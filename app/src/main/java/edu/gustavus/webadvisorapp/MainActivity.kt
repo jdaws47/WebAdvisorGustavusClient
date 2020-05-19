@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
+import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        val webView: WebView = findViewById(R.id.webview)
+        val webView: WAWebView = findViewById(R.id.webview)
 
         CookieSyncManager.createInstance(applicationContext)
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)

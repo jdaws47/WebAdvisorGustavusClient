@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import edu.gustavus.webadvisorapp.R
+import edu.gustavus.webadvisorapp.WAWebView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.text.DateFormat
@@ -25,7 +26,7 @@ private val STARTING_URL = "https://wa.gac.edu/WebAdvisor"
 
 class HomeFragment : Fragment() {
 
-    private lateinit var webView: WebView
+    private lateinit var webView: WAWebView
     private lateinit var loginButton: Button
     private lateinit var textView: TextView
 
@@ -41,7 +42,6 @@ class HomeFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
         webView = requireActivity().webview
-        //root.findViewById(R.id.webview) as WebView
         loginButton = root.findViewById(R.id.login_button) as Button
         textView = root.findViewById(R.id.text_home) as TextView
 
@@ -101,6 +101,11 @@ class HomeFragment : Fragment() {
                             )
                             Log.i("HTML", "Next Link: ${loginHref}")
                             homeViewModel.firstLoad = false
+                            // this is the theoretical js implementation of simulating the click,
+                            // however this does not get reflected visually, so is not used
+                            /*webView.loadUrl("javascript:(function(){" +
+                                    webView.clickElementById("acctLogin")+
+                                    "})()")*/
                             requireActivity().runOnUiThread(Runnable {
                                 webView.loadUrl(loginHref.replace("&amp;", "&").replace(":443", ""))
                                 toggleVisibility()
@@ -109,23 +114,27 @@ class HomeFragment : Fragment() {
                     }
                     if(html.indexOf("acctLogout") != -1 && homeViewModel.secondLoad) {
                         Log.i("HTML", "Above is signed in HTML")
-                        val welcomeIndexStart = html.indexOf("Welcome ")
-                        val welcomeIndexEnd = html.indexOf("\\u003C/strong>")
-                        val welcomeSub = html.substring(welcomeIndexStart until welcomeIndexEnd)
-                        Log.i("HTML", "${welcomeSub} at index $welcomeIndexStart")
-
-                        val studentIndexStart = html.indexOf("XWAMST_Bars") + "XWAMST_BARS\\\" href=\\\"".length
-                        val studentIndexEnd = html.indexOf(" Students") - "\\\" onfocus=\\\"blur()\\\">".length
-                        val studentUrl = html.substring(studentIndexStart until studentIndexEnd)
-                        Log.i("HTML", "${studentUrl} at index $studentIndexStart to $studentIndexEnd")
 
                         homeViewModel.secondLoad = false
-                        homeViewModel.welcomeString = welcomeSub
+
+                        webView.evaluateJavascript("javascript:(function(){" +
+                                webView.getInnerTextById("mainBody", 3) +
+                        "})()") {
+                            Log.i("HTML", "found inner text: $it")
+                            homeViewModel.welcomeString = it.replace("\"", "")
+                            requireActivity().runOnUiThread {
+                                textView.text = homeViewModel.welcomeString
+                            }
+
+                            webView.loadUrl("javascript:(function(){" +
+                                    webView.clickElementByInnerText("Students", "mainMenu") +
+                            "})()"
+                            )
+                        }
+
                         homeViewModel.loggedIn = true
                         requireActivity().runOnUiThread {
-                            textView.text = welcomeSub
                             login_button.isGone = true
-                            webView.loadUrl(studentUrl.replace("&amp;", "&").replace(":443", ""))
                             toggleVisibility()
                             updateUi()
                         }

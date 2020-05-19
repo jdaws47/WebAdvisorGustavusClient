@@ -7,19 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.gustavus.webadvisorapp.R
+import edu.gustavus.webadvisorapp.WAWebView
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class TranscriptFragment : Fragment() {
 
-    private lateinit var webView: WebView
+    private lateinit var webView: WAWebView
     private lateinit var recyclerView: RecyclerView
 
     private var adapter: TranscriptAdapter? = TranscriptAdapter(emptyList())
@@ -51,18 +51,12 @@ class TranscriptFragment : Fragment() {
                 if(view.title.toLowerCase().indexOf("webadvisor for students") != -1) {
                     Log.i("TRANSCRIPT", "clicking link")
                     view.loadUrl("javascript:(function(){"+
-                        "var spans = document.getElementById('bodyForm').getElementsByTagName('span');"+
-                        "for (var i=0;i<spans.length;i++){"+
-                            "if(spans[i].innerText.toString().localeCompare(\"View Transcript\") == 0){"+
-                                "return spans[i].parentElement.click();"+
-                            "}"+
-                        "}"+
+                        webView.clickElementBySpan("View Transcript", "bodyForm")+
                     "})()")
                 } else if(view.title.toLowerCase().indexOf("view transcript") != -1) {
                     Log.i("TRANSCRIPT", "submitting default transcript")
                     view.loadUrl("javascript:(function(){"+
-                            "var elements = document.getElementsByName('SUBMIT2');"+
-                            "elements[0].click();"+
+                        webView.clickElementByNameTag("SUBMIT2")+
                     "})()")
                 } else if(view.title.toLowerCase().indexOf("transcript") != -1) {
                     Log.i("TRANSCRIPT", "converting table")

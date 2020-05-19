@@ -3,7 +3,6 @@ package edu.gustavus.webadvisorapp.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import edu.gustavus.webadvisorapp.WebNavigator
 import java.net.URL
 
 class HomeViewModel : ViewModel() {

@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import edu.gustavus.webadvisorapp.R
+import edu.gustavus.webadvisorapp.WAWebView
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.CurrentCoursesFragment
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.SearchCoursesFragment
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.TranscriptFragment
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_courses.*
 
 class CoursesFragment : Fragment() {
 
-    private lateinit var webView: WebView
+    private lateinit var webView: WAWebView
     private lateinit var searchButton: Button
     private lateinit var currentClassesButton: Button
     private lateinit var transcriptButton: Button
