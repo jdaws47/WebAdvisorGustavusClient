@@ -43,11 +43,6 @@ class CoursesFragment : Fragment() {
 
         webView = requireActivity().webview
 
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        coursesViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-
         searchButton = root.findViewById(R.id.search_courses) as Button
         currentClassesButton = root.findViewById(R.id.view_current_classes) as Button
         transcriptButton = root.findViewById(R.id.view_transcript) as Button

@@ -21,4 +21,7 @@
     <string name="title_keyword_search">Course Title Keyword(s)</string>
     <string name="instructor_search">Instructor\'s Last Name</string>
     <string name="gen_ed_search">Area Approval</string>
+    <string name="course_main_menu">Course Options</string>
+    <string name="transcript_title">Transcript</string>
+    <string name="search_results_title">Search Results</string>
 </resources>

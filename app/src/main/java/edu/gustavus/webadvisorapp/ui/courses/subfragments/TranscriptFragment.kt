@@ -65,9 +65,6 @@ class TranscriptFragment : Fragment() {
                             "})()") { table ->
                         Log.i("TRANSCRIPT", "table: $table")
                         val tableArr = webView.convertTableStringTo2DArray(table)
-                        for(row in tableArr)
-                            for(col in row.indices)
-                                row[col] = row[col].replace(";", ",")
                         Log.i("TRANSCRIPT", "table: $tableArr")
                         adapter?.arr = tableArr
                         adapter?.submitList(tableArr)

@@ -80,7 +80,7 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
                             "else{"+
                                 "text = mainTable.rows[i].cells[j].children[0].children[0].innerText;}"+
                             "if(text.localeCompare('\\n') != 0){"+
-                                "returnStr = returnStr.concat(text.replace(',',';'));}"+
+                                "returnStr = returnStr.concat(text.replace(/,/g,';'));}"+
                             "returnStr = returnStr.concat(',');"+
                         "}"+
                     "returnStr = returnStr.concat('|');"+
@@ -95,6 +95,11 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
             val cols = rows[i].split(",")
             arr[i].addAll(cols)
         }
+
+        for (row in arr)
+            for (col in row.indices)
+                row[col] = row[col].replace(";", ",")
+
         return arr
     }
 

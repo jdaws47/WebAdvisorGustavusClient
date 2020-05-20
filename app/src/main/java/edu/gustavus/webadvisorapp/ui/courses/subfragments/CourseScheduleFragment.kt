@@ -111,9 +111,6 @@ class CourseScheduleFragment : Fragment() {
                         Log.i("Schedule", "table: $table")
                         //val tableArr = convertStringTo2DArray(table)
                         val tableArr = webView.convertTableStringTo2DArray(table)
-                        for (row in tableArr)
-                            for (col in row.indices)
-                                row[col] = row[col].replace(";", ",")
                         Log.i("Schedule", "table: $tableArr")
                         requireActivity().runOnUiThread {
                             hideFields()

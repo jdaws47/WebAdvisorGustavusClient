@@ -10,6 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
 import androidx.core.view.isGone
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
@@ -163,9 +164,25 @@ class SearchCoursesFragment : Fragment() {
                 } else if(view.title.toLowerCase().indexOf("webadvisor for students") != -1) {
                     webView.loadUrlWithJs(webView.clickElementBySpan("Search for Classes", "bodyForm"))
                 } else if(view.title.toLowerCase().indexOf("section selection results") != -1) {
-                    //TODO: Implement getting table of search results
                     Log.i("CourseSearch", "Arrived at searching results")
-
+                    Log.i("Schedule", "converting table")
+                    view.evaluateJavascript("javascript:(function(){"+
+                            webView.getTableByDivId("GROUP_Grp_LIST_VAR6")+
+                            "})()") { table ->
+                        Log.i("Schedule", "table: $table")
+                        //val tableArr = convertStringTo2DArray(table)
+                        val tableArr = webView.convertTableStringTo2DArray(table)
+                        Log.i("Schedule", "table: $tableArr")
+                        requireActivity().runOnUiThread {
+                            hideFields()
+                            val fragment = SearchRecyclerFragment.newInstance(tableArr.toTypedArray())
+                            childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                            childFragmentManager.beginTransaction()
+                                .replace(R.id.child_fragment_container, fragment)
+                                .addToBackStack(null)
+                                .commit()
+                        }
+                    }
                 }
             }
         }

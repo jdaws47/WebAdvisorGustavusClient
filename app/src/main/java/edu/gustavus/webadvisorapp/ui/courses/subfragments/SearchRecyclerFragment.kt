@@ -1,12 +1,9 @@
 package edu.gustavus.webadvisorapp.ui.courses.subfragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
@@ -15,22 +12,18 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.gustavus.webadvisorapp.R
 
 private const val ARG_TABLE = "data_table"
-private const val ARG_TERM = "term_string"
 
-class ScheduleRecyclerFragment : Fragment() {
+class SearchRecyclerFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var title: TextView
 
-    private var term: String = ""
-    private var adapter: ScheduleAdapter? = ScheduleAdapter(emptyList())
+    private var adapter: SearchAdapter? = SearchAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val table = (arguments?.getSerializable(ARG_TABLE) as Array<MutableList<String>>).toList()
         adapter?.arr = table
         adapter?.submitList(table)
-        term = arguments?.getString(ARG_TERM).toString()
     }
 
     override fun onCreateView(
@@ -38,14 +31,11 @@ class ScheduleRecyclerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val root =  inflater.inflate(R.layout.fragment_schedule_recycler, container, false)
+        val root =  inflater.inflate(R.layout.fragment_search_recycler, container, false)
 
-        recyclerView = root.findViewById(R.id.recyclerview_schedule)
+        recyclerView = root.findViewById(R.id.recyclerview_search)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
-
-        title = root.findViewById(R.id.title_schedule_recycler)
-        title.text = term
 
         return root
     }
@@ -70,7 +60,8 @@ class ScheduleRecyclerFragment : Fragment() {
             itemView.findViewById(R.id.list_item_text_3) as TextView,
             itemView.findViewById(R.id.list_item_text_4) as TextView,
             itemView.findViewById(R.id.list_item_text_5) as TextView,
-            itemView.findViewById(R.id.list_item_text_6) as TextView
+            itemView.findViewById(R.id.list_item_text_6) as TextView,
+            itemView.findViewById(R.id.list_item_text_7) as TextView
         )
 
         fun bind(row: MutableList<String>) {
@@ -82,10 +73,10 @@ class ScheduleRecyclerFragment : Fragment() {
         }
     }
 
-    private inner class ScheduleAdapter(var arr: List<MutableList<String>>) : androidx.recyclerview.widget.ListAdapter<MutableList<String>, CourseHolder>(ScheduleCallback()) {
+    private inner class SearchAdapter(var arr: List<MutableList<String>>) : androidx.recyclerview.widget.ListAdapter<MutableList<String>, CourseHolder>(SearchCallback()) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : CourseHolder {
-            val view = layoutInflater.inflate(R.layout.schedule_list_item, parent, false)
+            val view = layoutInflater.inflate(R.layout.search_list_item, parent, false)
             return CourseHolder(view)
         }
 
@@ -97,7 +88,7 @@ class ScheduleRecyclerFragment : Fragment() {
         }
     }
 
-    private inner class ScheduleCallback: DiffUtil.ItemCallback<MutableList<String>>() {
+    private inner class SearchCallback: DiffUtil.ItemCallback<MutableList<String>>() {
         override fun areItemsTheSame(old: MutableList<String>, new: MutableList<String>): Boolean {
             return old == new
         }
@@ -108,12 +99,11 @@ class ScheduleRecyclerFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(dataTable: Array<MutableList<String>>, term: String): ScheduleRecyclerFragment {
+        fun newInstance(dataTable: Array<MutableList<String>>): SearchRecyclerFragment {
             val args = Bundle().apply {
                 putSerializable(ARG_TABLE, dataTable)
-                putString(ARG_TERM, term)
             }
-            return ScheduleRecyclerFragment().apply {
+            return SearchRecyclerFragment().apply {
                 arguments = args
             }
         }

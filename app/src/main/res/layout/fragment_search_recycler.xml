@@ -4,27 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.courses.subfragments.TranscriptFragment">
+    tools:context=".ui.courses.subfragments.SearchRecyclerFragment" >
 
     <TextView
-        android:id="@+id/transcript_title"
+        android:id="@+id/title_search_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:text="@string/transcript_title"
         android:textColor="@android:color/black"
         android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/search_results_title" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_transcript"
+        android:id="@+id/recyclerview_search"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/transcript_title" />
+        app:layout_constraintTop_toBottomOf="@id/title_search_recycler" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
