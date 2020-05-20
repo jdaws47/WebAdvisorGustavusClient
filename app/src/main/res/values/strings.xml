@@ -12,4 +12,13 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="schedule_prompt">Select the Term of the Requested Schedule</string>
     <string name="submit">Submit</string>
+    <string name="search_prompt">Search for Classes</string>
+    <string name="meeting_after_text">Meeting After:</string>
+    <string name="ending_before_text">Ending Before:</string>
+    <string name="subjects">Subject</string>
+    <string name="course_number">Course #</string>
+    <string name="section">Section</string>
+    <string name="title_keyword_search">Course Title Keyword(s)</string>
+    <string name="instructor_search">Instructor\'s Last Name</string>
+    <string name="gen_ed_search">Area Approval</string>
 </resources>

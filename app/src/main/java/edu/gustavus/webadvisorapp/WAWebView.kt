@@ -60,7 +60,7 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
                 "var parentElem = document.getElementById('"+id+"');"+
                 "var returnStr = '';"+
                 "for(var i=0;i<parentElem.children.length;i++){"+
-                    "returnStr = returnStr.concat(parentElem.children[i].innerText);"+
+                    "returnStr = returnStr.concat(parentElem.children[i].innerText.replace(/,/g,';'));"+
                     "returnStr = returnStr.concat(',');"+
                 "}"+
                 "return returnStr;")

@@ -56,7 +56,7 @@ class CourseScheduleFragment : Fragment() {
 
         submitButton.setOnClickListener {
             webView.loadUrlWithJs(
-                "document.getElementById('VAR4').selectedIndex = "+dropdownSelection.selectedItemPosition+";"+
+                "document.getElementById('VAR4').selectedIndex = '"+dropdownSelection.selectedItemPosition+"';"+
                     webView.clickElementByNameTag("SUBMIT2")
             )
         }
@@ -94,7 +94,11 @@ class CourseScheduleFragment : Fragment() {
                     view.evaluateJavascript("javascript:(function(){"+
                             webView.getAllChildrenInnerTextById("VAR4")+
                     "})()") { listStr ->
-                        val list = listStr.replace("\"", "").split(',')
+                        val formattedListStr = listStr.replace("\"", "")
+                        val list: MutableList<String> = formattedListStr.substring(0, formattedListStr.length-1).split(',').toMutableList()
+                        for (i in list.indices) {
+                            list[i] = list[i].replace(";", ",")
+                        }
                         termOptions.value = list
                     }
                 } else if(view.title.toLowerCase().indexOf("webadvisor for students") != -1) {
