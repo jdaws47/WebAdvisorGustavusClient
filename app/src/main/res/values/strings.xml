@@ -24,4 +24,6 @@
     <string name="course_main_menu">Course Options</string>
     <string name="transcript_title">Transcript</string>
     <string name="search_results_title">Search Results</string>
+    <string name="logout_prompt">Logout</string>
+    <string name="welcome_logged_out">Please Login to Continue</string>
 </resources>

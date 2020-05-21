@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
@@ -106,6 +107,7 @@ class CoursesFragment : Fragment() {
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
+        // getting shown
         if (!hidden) {
             enableButtons(false)
             Log.i("CoursesFragment", "navigating to student menu")
@@ -134,7 +136,11 @@ class CoursesFragment : Fragment() {
         button_group.isGone = coursesViewModel.buttonsHidden
         for(button in buttonGroup.referencedIds) {
             if(requireView().findViewById<View>(button) is Button)
-                requireView().findViewById<Button>(button).isEnabled = coursesViewModel.buttonsEnabled
+                if (!coursesViewModel.buttonsEnabled || webView.loggedIn || button == R.id.search_courses)
+                    requireView().findViewById<Button>(button).isEnabled = coursesViewModel.buttonsEnabled
+        }
+        if (!webView.loggedIn && coursesViewModel.buttonsEnabled) {
+            Toast.makeText(requireContext(),"Please login to use all functionality", Toast.LENGTH_LONG).show()
         }
         /*searchButton.isGone = coursesViewModel.buttonsHidden
         currentClassesButton.isGone = coursesViewModel.buttonsHidden

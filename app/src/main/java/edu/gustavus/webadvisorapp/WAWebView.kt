@@ -9,6 +9,7 @@ import android.webkit.WebViewClient
 class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs) {
 
     public var loggedIn : Boolean = false
+    public val STARTING_URL = "https://wa.gac.edu/WebAdvisor"
 
     public fun clickElementBySpan(span: String, parentTag: String = "") : String {
         return (
@@ -126,6 +127,16 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
             }
         }
         webViewClient = wvc
-        reload()
+
+        if(title.toLowerCase().indexOf("webadvisor for students") != -1) {
+            Log.i("WAWebView", "at student menu")
+            callbacks()
+            if(nextWebClient != null) {
+                webViewClient = nextWebClient
+                reload()
+            }
+        } else {
+            loadUrl(STARTING_URL)
+        }
     }
 }

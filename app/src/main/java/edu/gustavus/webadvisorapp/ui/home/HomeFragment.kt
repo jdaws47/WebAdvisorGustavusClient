@@ -23,9 +23,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.schedule
 
-
-private val STARTING_URL = "https://wa.gac.edu/WebAdvisor"
-
 class HomeFragment : Fragment() {
 
     private lateinit var webView: WAWebView
@@ -47,16 +44,16 @@ class HomeFragment : Fragment() {
         loginButton = root.findViewById(R.id.login_button) as Button
         textView = root.findViewById(R.id.text_home) as TextView
 
+        homeViewModel.welcomeString = getString(R.string.welcome_logged_out)
         textView.text = homeViewModel.welcomeString
 
         webView.isVisible = false
 
         loginButton.setOnClickListener {
-            if(homeViewModel.firstPress) {
+            if(!homeViewModel.loggedIn) {
                 login()
             } else {
-                Log.i("HomeFragment", "toggling visibility on second press")
-                toggleVisibility()
+                logout()
             }
         }
 
@@ -79,13 +76,13 @@ class HomeFragment : Fragment() {
 
     private fun toggleVisibility() {
         webView.isVisible = !webView.isVisible
-        login_button.isGone = !loginButton.isGone
+        loginButton.isGone = !loginButton.isGone
         textView.isGone = !textView.isGone
     }
 
     private fun showWebView() {
         webView.isVisible = true
-        login_button.isGone = true
+        loginButton.isGone = true
         textView.isGone = true
     }
 
@@ -158,7 +155,7 @@ class HomeFragment : Fragment() {
                         homeViewModel.loggedIn = true
                         webView.loggedIn = true
                         requireActivity().runOnUiThread {
-                            login_button.isGone = true
+                            loginButton.text = getString(R.string.logout_prompt)
                             toggleVisibility()
                             updateUi()
                         }
@@ -170,9 +167,9 @@ class HomeFragment : Fragment() {
         //webView.clearCache(false)
         //webView.webChromeClient = WebChromeClient()
         webView.setWebViewClient(wvc)
-        webView.loadUrl(STARTING_URL)
+        webView.loadUrl(webView.STARTING_URL)
 
-        Timer().schedule(5000) {
+        Timer().schedule(10000) {
             Log.i("LoginTimer","loginTimer executing")
             if(didNotReachLoginScreen) {
                 requireActivity().runOnUiThread {
@@ -180,15 +177,43 @@ class HomeFragment : Fragment() {
                     homeViewModel.firstLoad = true
                     homeViewModel.secondLoad = true
                     homeViewModel.loggedIn = false
+                    webView.loggedIn = false
                     webView.clearCache(true)
                     CookieManager.getInstance().removeAllCookies(null)
-                    webView.loadUrl(STARTING_URL)
+                    webView.loadUrl(webView.STARTING_URL)
                 }
             }
         }
     }
 
+    private fun logout() {
+        val wvc = object : WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String){
+                webView.evaluateJavascript(
+                    "(function() { return ('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>'); })();")
+                { html ->
+                    Log.d("HTML", html)
+                    if (webView.title.toLowerCase().indexOf("main webadvisor menu") != -1 && homeViewModel.loggedIn) {
+                        webView.loadUrlWithJs(webView.clickElementById("acctLogout", 1))
+                        requireActivity().runOnUiThread {
+                            homeViewModel.firstLoad = true
+                            homeViewModel.secondLoad = true
+                            webView.loggedIn = false
+                            homeViewModel.loggedIn = false
+                            homeViewModel.welcomeString = getString(R.string.welcome_logged_out)
+                            updateUi()
+                        }
+                    }
+                }
+            }
+        }
+
+        webView.setWebViewClient(wvc)
+        webView.loadUrl(webView.STARTING_URL)
+    }
+
     private fun updateUi() {
-        loginButton.isGone = homeViewModel.loggedIn
+        loginButton.text = if(webView.loggedIn) { getString(R.string.logout_prompt) } else { getString(R.string.login_button_prompt) }
+        textView.text = homeViewModel.welcomeString
     }
 }
