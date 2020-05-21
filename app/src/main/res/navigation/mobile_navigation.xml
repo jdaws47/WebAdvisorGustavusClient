@@ -18,8 +18,8 @@
         tools:layout="@layout/fragment_courses" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="edu.gustavus.webadvisorapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_reslife"
+        android:name="edu.gustavus.webadvisorapp.ui.reslife.ResLifeFragment"
+        android:label="@string/title_reslife"
+        tools:layout="@layout/fragment_reslife" />
 </navigation>

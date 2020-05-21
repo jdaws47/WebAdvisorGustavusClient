@@ -2,10 +2,10 @@
     <string name="app_name">WebAdvisor</string>
     <string name="title_home">Home</string>
     <string name="title_courses">Courses</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_reslife">ResLife</string>
     <string name="login_button_prompt">Login</string>
     <string name="class_search_button">Search for Classes</string>
-    <string name="current_courses_button">View Course Schedule</string>
+    <string name="current_courses_button">Course Schedule</string>
     <string name="transcript_view_button">View Transcript</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -26,4 +26,10 @@
     <string name="search_results_title">Search Results</string>
     <string name="logout_prompt">Logout</string>
     <string name="welcome_logged_out">Please Login to Continue</string>
+    <string name="res_life_options">Residential Life Options</string>
+    <string name="meal_plan_button">Marketplace Summary</string>
+    <string name="mail_box_button">Mail Box Information</string>
+    <string name="mail_box_title">Mail Box Information</string>
+    <string name="box_number">Box Number:</string>
+    <string name="box_combination">Box Combination:</string>
 </resources>

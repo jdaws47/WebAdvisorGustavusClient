@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
         webView.isVisible = false
 
         loginButton.setOnClickListener {
-            if(!homeViewModel.loggedIn) {
+            if(!webView.loggedIn) {
                 login()
             } else {
                 logout()
@@ -63,15 +63,16 @@ class HomeFragment : Fragment() {
     }
 
     override fun onStart() {
-        super.onStart()
         checkTime()
+        super.onStart()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
         if (!hidden) {
             checkTime()
+            updateUi()
         }
+        super.onHiddenChanged(hidden)
     }
 
     private fun toggleVisibility() {
@@ -94,11 +95,13 @@ class HomeFragment : Fragment() {
         if (hour.toInt() >= 2 && hour.toInt() < 4){
             loginButton.isGone = false
             loginButton.isEnabled = false
-            textView.text = "WebAdvisor is unavailable daily from 2:00am to 4:00am CST"
+            homeViewModel.welcomeString = "WebAdvisor is unavailable daily from 2:00am to 4:00am CST"
+            updateUi()
         }
     }
 
     private fun login() {
+        Log.i("HomeFragment", "Logging in")
         var didNotReachLoginScreen = true
 
         val wvc = object : WebViewClient() {
@@ -142,9 +145,6 @@ class HomeFragment : Fragment() {
                         "})()") {
                             Log.i("HTML", "found inner text: $it")
                             homeViewModel.welcomeString = it.replace("\"", "")
-                            requireActivity().runOnUiThread {
-                                textView.text = homeViewModel.welcomeString
-                            }
 
                             webView.loadUrl("javascript:(function(){" +
                                     webView.clickElementByInnerText("Students", "mainMenu") +
@@ -187,13 +187,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun logout() {
+        Log.i("HomeFragment", "Logging out")
+
         val wvc = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String){
                 webView.evaluateJavascript(
                     "(function() { return ('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>'); })();")
                 { html ->
                     Log.d("HTML", html)
-                    if (webView.title.toLowerCase().indexOf("main webadvisor menu") != -1 && homeViewModel.loggedIn) {
+                    if (webView.title.toLowerCase().indexOf("main webadvisor menu") != -1 && webView.loggedIn) {
                         webView.loadUrlWithJs(webView.clickElementById("acctLogout", 1))
                         requireActivity().runOnUiThread {
                             homeViewModel.firstLoad = true
@@ -202,6 +204,7 @@ class HomeFragment : Fragment() {
                             homeViewModel.loggedIn = false
                             homeViewModel.welcomeString = getString(R.string.welcome_logged_out)
                             updateUi()
+                            Log.i("HomeFragment", "Logged out successfully")
                         }
                     }
                 }

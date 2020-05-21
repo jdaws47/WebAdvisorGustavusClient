@@ -1,4 +1,4 @@
-package edu.gustavus.webadvisorapp.ui.courses
+package edu.gustavus.webadvisorapp.ui.reslife
 
 import android.os.Bundle
 import android.util.Log
@@ -12,27 +12,29 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import edu.gustavus.webadvisorapp.R
 import edu.gustavus.webadvisorapp.WAWebView
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.CourseScheduleFragment
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.SearchCoursesFragment
 import edu.gustavus.webadvisorapp.ui.courses.subfragments.TranscriptFragment
+import edu.gustavus.webadvisorapp.ui.reslife.subfragments.MailBoxFragment
+import edu.gustavus.webadvisorapp.ui.reslife.subfragments.MealPlanFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_courses.*
 
-class CoursesFragment : Fragment() {
+class ResLifeFragment : Fragment() {
 
     private lateinit var webView: WAWebView
-    private lateinit var searchButton: Button
-    private lateinit var currentClassesButton: Button
-    private lateinit var transcriptButton: Button
+
+    private lateinit var textView: TextView
+    private lateinit var mailboxButton: Button
+    private lateinit var mealPlanButton: Button
 
     private lateinit var buttonGroup: Group
 
-    private val coursesViewModel: CoursesViewModel by lazy {
-        ViewModelProviders.of(this).get(CoursesViewModel::class.java)
+    private val resLifeViewModel: ResLifeViewModel by lazy {
+        ViewModelProviders.of(this).get(ResLifeViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -40,19 +42,18 @@ class CoursesFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_courses, container, false)
+        val root = inflater.inflate(R.layout.fragment_reslife, container, false)
 
         webView = requireActivity().webview
 
-        searchButton = root.findViewById(R.id.search_courses) as Button
-        currentClassesButton = root.findViewById(R.id.view_current_classes) as Button
-        transcriptButton = root.findViewById(R.id.view_transcript) as Button
-        buttonGroup = root.findViewById(R.id.button_group) as Group
+        textView = root.findViewById(R.id.text_reslife)
+        mailboxButton = root.findViewById(R.id.mail_box_button)
+        mealPlanButton = root.findViewById(R.id.meal_plan_button)
+        buttonGroup = root.findViewById(R.id.reslife_button_group) as Group
 
-        searchButton.setOnClickListener {
+        mailboxButton.setOnClickListener {
             hideButtons()
-            val fragment =
-                SearchCoursesFragment()
+            val fragment = MailBoxFragment()
             childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             childFragmentManager.beginTransaction()
                 .replace(R.id.child_fragment_container, fragment)
@@ -60,21 +61,9 @@ class CoursesFragment : Fragment() {
                 .commit()
         }
 
-        currentClassesButton.setOnClickListener {
+        mealPlanButton.setOnClickListener {
             hideButtons()
-            val fragment =
-                CourseScheduleFragment()
-            childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            childFragmentManager.beginTransaction()
-                .replace(R.id.child_fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
-
-        transcriptButton.setOnClickListener {
-            hideButtons()
-            val fragment =
-                TranscriptFragment()
+            val fragment = MealPlanFragment()
             childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             childFragmentManager.beginTransaction()
                 .replace(R.id.child_fragment_container, fragment)
@@ -118,32 +107,29 @@ class CoursesFragment : Fragment() {
     }
 
     private fun hideButtons() {
-        coursesViewModel.buttonsHidden = true
+        resLifeViewModel.buttonsHidden = true
         updateButtons()
     }
 
     private fun showButtons() {
-        coursesViewModel.buttonsHidden = false
+        resLifeViewModel.buttonsHidden = false
         updateButtons()
     }
 
     private fun enableButtons(enable: Boolean){
-        coursesViewModel.buttonsEnabled = enable
+        resLifeViewModel.buttonsEnabled = enable
         updateButtons()
     }
 
     private fun updateButtons() {
-        buttonGroup.isGone = coursesViewModel.buttonsHidden
+        buttonGroup.isGone = resLifeViewModel.buttonsHidden
         for(button in buttonGroup.referencedIds) {
             if(requireView().findViewById<View>(button) is Button)
-                if (!coursesViewModel.buttonsEnabled || webView.loggedIn || button == R.id.search_courses)
-                    requireView().findViewById<Button>(button).isEnabled = coursesViewModel.buttonsEnabled
+                if (!resLifeViewModel.buttonsEnabled || webView.loggedIn || button == R.id.search_courses)
+                    requireView().findViewById<Button>(button).isEnabled = resLifeViewModel.buttonsEnabled
         }
-        if (!webView.loggedIn && coursesViewModel.buttonsEnabled) {
+        if (!webView.loggedIn && resLifeViewModel.buttonsEnabled) {
             Toast.makeText(requireContext(),"Please login to use all functionality", Toast.LENGTH_LONG).show()
         }
-        /*searchButton.isGone = coursesViewModel.buttonsHidden
-        currentClassesButton.isGone = coursesViewModel.buttonsHidden
-        transcriptButton.isGone = coursesViewModel.buttonsHidden*/
     }
 }

@@ -1,28 +1,18 @@
 package edu.gustavus.webadvisorapp
 
 import android.os.Bundle
-import android.view.MenuItem
+import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
-import android.webkit.WebSettings
-import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.navigation.ui.onNavDestinationSelected
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import edu.gustavus.webadvisorapp.ui.courses.CoursesFragment
 import edu.gustavus.webadvisorapp.ui.home.HomeFragment
-import edu.gustavus.webadvisorapp.ui.notifications.NotificationsFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import edu.gustavus.webadvisorapp.ui.reslife.ResLifeFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -60,16 +50,22 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_courses -> {
                     changeFragment(CoursesFragment(), CoursesFragment::class.java.simpleName)
                 }
-                R.id.navigation_notifications -> {
-                    changeFragment(NotificationsFragment(), NotificationsFragment::class.java.simpleName)
+                R.id.navigation_reslife -> {
+                    changeFragment(ResLifeFragment(), ResLifeFragment::class.java.simpleName)
                 }
             }
 
             true
         }
 
+        Log.i("MainActivityHome","backstack: ${supportFragmentManager.backStackEntryCount}")
+
         //Manually displaying the first fragment - one time only
+        changeFragment(HomeFragment(), HomeFragment::class.java.simpleName)
         navView.menu.findItem(R.id.navigation_home).isChecked = true
+
+        Log.i("MainActivityHome","backstack: ${supportFragmentManager.backStackEntryCount}")
+        Log.i("MainActivityHome","backstack: ${supportFragmentManager.primaryNavigationFragment}")
     }
 
 
