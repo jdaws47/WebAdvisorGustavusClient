@@ -145,6 +145,9 @@ class HomeFragment : Fragment() {
                         "})()") {
                             Log.i("HTML", "found inner text: $it")
                             homeViewModel.welcomeString = it.replace("\"", "")
+                            requireActivity().runOnUiThread {
+                                textView.text = homeViewModel.welcomeString
+                            }
 
                             webView.loadUrl("javascript:(function(){" +
                                     webView.clickElementByInnerText("Students", "mainMenu") +
