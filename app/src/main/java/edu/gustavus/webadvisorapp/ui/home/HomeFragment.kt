@@ -17,8 +17,6 @@ import androidx.lifecycle.ViewModelProviders
 import edu.gustavus.webadvisorapp.R
 import edu.gustavus.webadvisorapp.WAWebView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_home.*
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.schedule
@@ -150,7 +148,7 @@ class HomeFragment : Fragment() {
                             }
 
                             webView.loadUrl("javascript:(function(){" +
-                                    webView.clickElementByInnerText("Students", "mainMenu") +
+                                    webView.clickElementByInnerText("Students", "mainMenu", "a") +
                             "})()"
                             )
                         }
@@ -160,6 +158,7 @@ class HomeFragment : Fragment() {
                         requireActivity().runOnUiThread {
                             loginButton.text = getString(R.string.logout_prompt)
                             toggleVisibility()
+//                            webView.isVisible = !webView.isVisible
                             updateUi()
                         }
                     }
@@ -199,7 +198,7 @@ class HomeFragment : Fragment() {
                 { html ->
                     Log.d("HTML", html)
                     if (webView.title.toLowerCase().indexOf("main webadvisor menu") != -1 && webView.loggedIn) {
-                        webView.loadUrlWithJs(webView.clickElementById("acctLogout", 1))
+                        webView.evaluateJs(webView.clickElementById("acctLogout", 1))
                         requireActivity().runOnUiThread {
                             homeViewModel.firstLoad = true
                             homeViewModel.secondLoad = true

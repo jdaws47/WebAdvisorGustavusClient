@@ -55,7 +55,7 @@ class CourseScheduleFragment : Fragment() {
         termOptions.observe(viewLifecycleOwner, listObserver)
 
         submitButton.setOnClickListener {
-            webView.loadUrlWithJs(
+            webView.evaluateJs(
                 "document.getElementById('VAR4').selectedIndex = '"+dropdownSelection.selectedItemPosition+"';"+
                     webView.clickElementByNameTag("SUBMIT2")
             )
@@ -102,7 +102,7 @@ class CourseScheduleFragment : Fragment() {
                         termOptions.value = list
                     }
                 } else if(view.title.toLowerCase().indexOf("webadvisor for students") != -1) {
-                    webView.loadUrlWithJs(webView.clickElementBySpan("My Class Schedule", "bodyForm"))
+                    webView.evaluateJs(webView.clickElementBySpan("My Class Schedule", "bodyForm"))
                 } else if(view.title.toLowerCase().indexOf("class schedule") != -1) {
                     Log.i("Schedule", "converting table")
                     view.evaluateJavascript("javascript:(function(){"+

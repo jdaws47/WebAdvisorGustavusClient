@@ -7,17 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.MutableLiveData
 import edu.gustavus.webadvisorapp.R
 import edu.gustavus.webadvisorapp.WAWebView
-import edu.gustavus.webadvisorapp.ui.courses.subfragments.ScheduleRecyclerFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MailBoxFragment : Fragment() {
@@ -68,7 +61,7 @@ class MailBoxFragment : Fragment() {
 
                     }
                 } else if(view.title.toLowerCase().indexOf("webadvisor for students") != -1) {
-                    webView.loadUrlWithJs(webView.clickElementBySpan("Box and Combination", "bodyForm"))
+                    webView.evaluateJs(webView.clickElementBySpan("Box and Combination", "bodyForm"))
                 }
             }
         }

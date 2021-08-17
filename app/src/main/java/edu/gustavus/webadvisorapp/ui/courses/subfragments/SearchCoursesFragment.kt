@@ -85,7 +85,7 @@ class SearchCoursesFragment : Fragment() {
 
         submitButton.setOnClickListener {
             if(termSelection.selectedItemPosition != 0) {
-                webView.loadUrlWithJs(
+                webView.evaluateJs(
                     "document.getElementById('VAR1').selectedIndex = '" + termSelection.selectedItemPosition + "';" +
                         "document.getElementById('LIST_VAR1_1').selectedIndex = '" + departmentSelection.selectedItemPosition + "';" +
                         "document.getElementById('LIST_VAR3_1').value = '" + courseNumberField.text + "';" +
@@ -162,7 +162,7 @@ class SearchCoursesFragment : Fragment() {
                             webView.getAllChildrenInnerTextById("VAR23")+
                             "})()") { areaApprovalOptions.value = splitStringToList(it) }
                 } else if(view.title.toLowerCase().indexOf("webadvisor for students") != -1) {
-                    webView.loadUrlWithJs(webView.clickElementBySpan("Search for Classes", "bodyForm"))
+                    webView.evaluateJs(webView.clickElementBySpan("Search for Classes", "bodyForm"))
                 } else if(view.title.toLowerCase().indexOf("section selection results") != -1) {
                     Log.i("CourseSearch", "Arrived at searching results")
                     Log.i("Schedule", "converting table")

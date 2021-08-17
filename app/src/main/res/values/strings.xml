@@ -32,4 +32,5 @@
     <string name="mail_box_title">Mail Box Information</string>
     <string name="box_number">Box Number:</string>
     <string name="box_combination">Box Combination:</string>
+    <string name="meal_plan_title">Marketplace Account</string>
 </resources>

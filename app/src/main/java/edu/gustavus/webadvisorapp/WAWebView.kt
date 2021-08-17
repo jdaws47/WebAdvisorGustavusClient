@@ -21,11 +21,11 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
                 "}")
     }
 
-    public fun clickElementByInnerText(innerText: String, parentTag: String = "") : String {
+    public fun clickElementByInnerText(innerText: String, parentTag: String = "", tagName:String = "*") : String {
         return (
-                "var elems = document"+(if(!parentTag.isBlank()){".getElementById('"+parentTag+"')"} else {""})+".getElementsByTagName('*');"+
+                "var elems = document"+(if(parentTag.isNotBlank()){".getElementById('$parentTag')"} else {""})+".getElementsByTagName('$tagName');"+
                 "for (var i=0;i<elems.length;i++){"+
-                    "if(elems[i].innerText.toString().localeCompare(\""+innerText+"\") == 0){"+
+                    "if(elems[i].innerText.toString().includes(\""+innerText+"\")){"+
                         "return elems[i].click();"+
                     "}"+
                 "}")
@@ -49,11 +49,11 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
                 "return element"+ (".children[0]".repeat(firstChildOfRepeat)) +".innerText;")
     }
 
-    public fun loadUrlWithJs(js: String) {
-        loadUrl("javascript:(function(){" +
+    public fun evaluateJs(js: String) {
+        evaluateJavascript("javascript:(function(){"+
                 js +
                 "})()"
-        )
+        , null)
     }
 
     public fun getAllChildrenInnerTextById(id: String) : String {
@@ -67,7 +67,7 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
                 "return returnStr;")
     }
 
-    public fun getTableByDivId(id: String) : String {
+    public fun getTableByDivId(id: String, headerRows: Int = 1) : String {
         return (
                 "var div = document.getElementById('"+id+"');"+
                 "var mainTable = div.children[2];"+
@@ -76,7 +76,7 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
                         "for (var j=0;j<mainTable.rows[i].cells.length;j++){"+
                             "if(j == 0){continue;}"+
                             "var text = '';"+
-                            "if(i == 0){"+
+                            "if(i < $headerRows ){"+
                                 "text = mainTable.rows[i].cells[j].innerText;}"+
                             "else{"+
                                 "text = mainTable.rows[i].cells[j].children[0].children[0].innerText;}"+
@@ -119,9 +119,11 @@ class WAWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs)
                             reload()
                         }
                     } else if(view.title.toLowerCase().indexOf("main webadvisor menu") != -1) {
-                        loadUrlWithJs(clickElementByInnerText("Students", "mainMenu"))
+                        Log.i("WAWebView", "at main wa menu")
+                        evaluateJs(clickElementByInnerText("Students", "mainMenu", "a"))
                     } else {
-                        loadUrlWithJs(clickElementById("acctMain", 1))
+                        Log.i("WAWebView", "recognized no title")
+                        evaluateJs(clickElementById("acctMain", 1))
                     }
                 }
             }
