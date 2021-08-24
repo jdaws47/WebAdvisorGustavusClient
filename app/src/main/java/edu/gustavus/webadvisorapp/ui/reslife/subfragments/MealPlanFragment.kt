@@ -1,5 +1,6 @@
 package edu.gustavus.webadvisorapp.ui.reslife.subfragments
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -78,13 +79,17 @@ class MealPlanFragment : Fragment() {
             itemView.findViewById(R.id.list_item_text_2) as TextView
         )
 
-        fun bind(row: MutableList<String>) {
+        fun bind(row: MutableList<String>, position: Int) {
             this.row = row
             for(i in textViews.indices) {
                 if(i<row.size)
                     textViews[i].text = row[i]
                 else
                     textViews[i].text = ""
+                if(position == 1)
+                    textViews[i].setTypeface(null, Typeface.BOLD)
+                else
+                    textViews[i].setTypeface(null, Typeface.NORMAL)
             }
         }
     }
@@ -100,7 +105,7 @@ class MealPlanFragment : Fragment() {
 
         override fun onBindViewHolder(holder: DaySummaryHolder, position: Int) {
             val row = arr[position]
-            holder.bind(row)
+            holder.bind(row, position)
         }
     }
 

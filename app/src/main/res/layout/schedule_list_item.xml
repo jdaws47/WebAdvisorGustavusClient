@@ -11,14 +11,14 @@
         android:layout_weight="22"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textSize="16sp" />
+        android:textSize="12sp" />
     <TextView
         android:id="@+id/list_item_text_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="12"
         android:paddingEnd="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textAlignment="center" />
     <TextView
         android:id="@+id/list_item_text_2"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="16"
         android:paddingEnd="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textAlignment="center" />
     <TextView
         android:id="@+id/list_item_text_3"
@@ -34,14 +34,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="15"
         android:paddingEnd="4dp"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
     <TextView
         android:id="@+id/list_item_text_4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="10"
         android:paddingEnd="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textAlignment="center" />
     <TextView
         android:id="@+id/list_item_text_5"
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="10"
         android:paddingEnd="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textAlignment="center" />
     <TextView
         android:id="@+id/list_item_text_6"
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="15"
         android:paddingEnd="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textAlignment="center" />
 
 </LinearLayout>

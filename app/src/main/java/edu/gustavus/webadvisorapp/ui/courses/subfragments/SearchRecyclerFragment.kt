@@ -1,6 +1,8 @@
 package edu.gustavus.webadvisorapp.ui.courses.subfragments
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,11 +66,15 @@ class SearchRecyclerFragment : Fragment() {
             itemView.findViewById(R.id.list_item_text_7) as TextView
         )
 
-        fun bind(row: MutableList<String>) {
+        fun bind(row: MutableList<String>, position: Int) {
             this.row = row
             for(i in textViews.indices) {
                 if(i<row.size)
                     textViews[i].text = row[i]
+                if(position == 0)
+                    textViews[i].setTypeface(null, Typeface.BOLD)
+                else
+                    textViews[i].setTypeface(null, Typeface.NORMAL)
             }
         }
     }
@@ -84,7 +90,8 @@ class SearchRecyclerFragment : Fragment() {
 
         override fun onBindViewHolder(holder: CourseHolder, position: Int) {
             val row = arr[position]
-            holder.bind(row)
+            Log.i("CHECKTHIS", "position: ${position}")
+            holder.bind(row, position)
         }
     }
 
